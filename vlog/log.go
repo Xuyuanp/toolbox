@@ -11,6 +11,7 @@ var verbose bool
 
 func init() {
 	flag.BoolVar(&verbose, "v", false, "verbose mode")
+	flag.BoolVar(&verbose, "verbose", false, "verbose mode")
 }
 
 // Copy from log lib
@@ -18,6 +19,8 @@ var (
 	SetOutput = log.SetOutput
 	SetFlags  = log.SetFlags
 	SetPrefix = log.SetPrefix
+	Prefix    = log.Prefix
+	Flags     = log.Flags
 )
 
 // Copy from log lib
