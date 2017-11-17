@@ -4,7 +4,6 @@ import (
 	"flag"
 	"fmt"
 	"log"
-	"os"
 )
 
 var verbose bool
@@ -21,6 +20,19 @@ var (
 	SetPrefix = log.SetPrefix
 	Prefix    = log.Prefix
 	Flags     = log.Flags
+	Output    = log.Output
+
+	Print   = log.Print
+	Printf  = log.Printf
+	Println = log.Println
+
+	Fatal   = log.Fatal
+	Fatalf  = log.Fatalf
+	Fatalln = log.Fatalln
+
+	Panic   = log.Panic
+	Panicf  = log.Panicf
+	Panicln = log.Panicln
 )
 
 // Copy from log lib
@@ -33,11 +45,6 @@ const (
 	LUTC                          // if Ldate or Ltime is set, use UTC rather than the local time zone
 	LstdFlags     = Ldate | Ltime // initial values for the standard logger
 )
-
-// Output calls log.Output by calldepth inc.
-func Output(calldepth int, s string) {
-	log.Output(calldepth+1, s)
-}
 
 // Verbose calls Output to print to the standard logger only if verbose is true.
 // Arguments are handled in the manner of fmt.Print.
@@ -64,61 +71,4 @@ func Verboseln(args ...interface{}) {
 		return
 	}
 	Output(2, fmt.Sprintln(args...))
-}
-
-// Print calls Output to print to the standard logger.
-// Arguments are handled in the manner of fmt.Print.
-func Print(v ...interface{}) {
-	Output(2, fmt.Sprint(v...))
-}
-
-// Printf calls Output to print to the standard logger.
-// Arguments are handled in the manner of fmt.Printf.
-func Printf(format string, v ...interface{}) {
-	Output(2, fmt.Sprintf(format, v...))
-}
-
-// Println calls Output to print to the standard logger.
-// Arguments are handled in the manner of fmt.Println.
-func Println(v ...interface{}) {
-	Output(2, fmt.Sprintln(v...))
-}
-
-// Fatal is equivalent to Print() followed by a call to os.Exit(1).
-func Fatal(v ...interface{}) {
-	Output(2, fmt.Sprint(v...))
-	os.Exit(1)
-}
-
-// Fatalf is equivalent to Printf() followed by a call to os.Exit(1).
-func Fatalf(format string, v ...interface{}) {
-	Output(2, fmt.Sprintf(format, v...))
-	os.Exit(1)
-}
-
-// Fatalln is equivalent to Println() followed by a call to os.Exit(1).
-func Fatalln(v ...interface{}) {
-	Output(2, fmt.Sprintln(v...))
-	os.Exit(1)
-}
-
-// Panic is equivalent to Print() followed by a call to panic().
-func Panic(v ...interface{}) {
-	s := fmt.Sprint(v...)
-	Output(2, s)
-	panic(s)
-}
-
-// Panicf is equivalent to Printf() followed by a call to panic().
-func Panicf(format string, v ...interface{}) {
-	s := fmt.Sprintf(format, v...)
-	Output(2, s)
-	panic(s)
-}
-
-// Panicln is equivalent to Println() followed by a call to panic().
-func Panicln(v ...interface{}) {
-	s := fmt.Sprintln(v...)
-	Output(2, s)
-	panic(s)
 }
