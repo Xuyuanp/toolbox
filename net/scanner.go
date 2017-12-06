@@ -10,7 +10,7 @@ var _ ListenerScanner = &listenerScanner{}
 
 // errors returned by scanner
 var (
-	ErrNilListener = errors.New("imhttp: nil listener")
+	ErrNilListener = errors.New("nil listener")
 )
 
 // ListenerScanner provides a convenient interface for accepting connection from a net listener.
