@@ -7,7 +7,7 @@ import (
 	"net"
 )
 
-var _ Scanner= &scanner{}
+var _ Scanner = &scanner{}
 
 // errors returned by scanner
 var (
@@ -68,22 +68,22 @@ func (s *scanner) Err() error {
 }
 
 // Close closes the internal listener.
-func (s *scanner) Close() error {
+func (s *scanner) Close() (err error) {
 	if s.ln != nil {
-		return s.ln.Close()
+		err = s.ln.Close()
 	}
-	return nil
+	return
 }
 
 // ScanNet returns a Scanner accepts normal connection.
-func ScanNet(network, addr string) Scanner{
+func ScanNet(network, addr string) Scanner {
 	scanner := &scanner{}
 	scanner.ln, scanner.err = net.Listen(network, addr)
 	return scanner
 }
 
 // ScanTLS returns a Scanner accepts tls connection.
-func ScanTLS(network, addr string, config *tls.Config) Scanner{
+func ScanTLS(network, addr string, config *tls.Config) Scanner {
 	scanner := &scanner{}
 	scanner.ln, scanner.err = tls.Listen(network, addr, config)
 	return scanner
