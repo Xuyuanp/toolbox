@@ -22,11 +22,17 @@ func getFreePort(network string) (string, error) {
 
 func TestGraceful(t *testing.T) {
 	ctx, cancel := context.WithCancel(context.Background())
-	srv := &stdhttp.Server{}
+	addr, err := getFreePort("tcp")
+	if err != nil {
+		t.Fatalf("get free port failed: %v", err)
+	}
+	srv := &stdhttp.Server{
+		Addr: addr,
+	}
 	go func() {
 		cancel()
 	}()
-	err := Graceful(ctx, srv, time.Second)
+	err = Graceful(ctx, srv, time.Second)
 	if want, got := (error)(nil), err; got != want {
 		t.Fatalf("want error: %v, but got: %v", want, got)
 	}
