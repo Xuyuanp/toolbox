@@ -89,19 +89,20 @@ func TestScannerCloser(t *testing.T) {
 
 	ln := scanner.Listener()
 	addr := ln.Addr()
+
 	type asyncAddr struct {
 		err  error
 		addr net.Addr
 	}
-	chAddr := make(chan *asyncAddr, 1)
+	chAddr := make(chan asyncAddr, 1)
 	go func() {
-		aa := &asyncAddr{}
+		aa := asyncAddr{}
 		conn, err := stdnet.Dial(addr.Network(), addr.String())
 		if err != nil {
 			aa.err = err
+			return
 		}
 		defer conn.Close()
-		chAddr <- aa
 		aa.addr = conn.LocalAddr()
 		chAddr <- aa
 	}()

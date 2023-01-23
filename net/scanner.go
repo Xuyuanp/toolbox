@@ -7,7 +7,7 @@ import (
 	"net"
 )
 
-var _ ScannerCloser = &scanner{}
+var _ Scanner= &scanner{}
 
 // errors returned by scanner
 var (
@@ -16,16 +16,11 @@ var (
 
 // Scanner provides a convenient interface for accepting connection from a net listener.
 type Scanner interface {
+	io.Closer
 	Scan() bool
 	Conn() net.Conn
 	Listener() net.Listener
 	Err() error
-}
-
-// ScannerCloser is a closable Scanner
-type ScannerCloser interface {
-	Scanner
-	io.Closer
 }
 
 type scanner struct {
@@ -81,14 +76,14 @@ func (s *scanner) Close() error {
 }
 
 // ScanNet returns a Scanner accepts normal connection.
-func ScanNet(network, addr string) ScannerCloser {
+func ScanNet(network, addr string) Scanner{
 	scanner := &scanner{}
 	scanner.ln, scanner.err = net.Listen(network, addr)
 	return scanner
 }
 
 // ScanTLS returns a Scanner accepts tls connection.
-func ScanTLS(network, addr string, config *tls.Config) ScannerCloser {
+func ScanTLS(network, addr string, config *tls.Config) Scanner{
 	scanner := &scanner{}
 	scanner.ln, scanner.err = tls.Listen(network, addr, config)
 	return scanner
